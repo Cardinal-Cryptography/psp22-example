@@ -11,9 +11,20 @@ mod psp22_example {
     use ink_prelude::string::String;
     use ink_storage::traits::SpreadAllocate;
     use openbrush::{
-        contracts::psp22::{self, extensions::metadata, psp22::Internal},
+        contracts::{
+            psp22::{
+                self,
+                extensions::{metadata, mintable},
+                psp22::Internal,
+                PSP22Error,
+            },
+            traits::ownable::OwnableError,
+        },
         traits::Storage,
     };
+
+    /// Result type
+    pub type Result<T> = core::result::Result<T, PSP22Error>;
 
     /// Event type
     pub type Event = <Psp22Example as ContractEventBase>::Type;
@@ -25,6 +36,7 @@ mod psp22_example {
         psp22: psp22::Data,
         #[storage_field]
         metadata: metadata::Data,
+        owner: AccountId,
     }
 
     impl Psp22Example {
@@ -39,6 +51,7 @@ mod psp22_example {
                     .psp22
                     ._mint_to(Self::env().caller(), total_supply)
                     .unwrap();
+                instance.owner = Self::env().caller();
             })
         }
 
@@ -48,6 +61,7 @@ mod psp22_example {
                 instance.metadata.name = Some(name.into());
                 instance.metadata.symbol = Some(symbol.into());
                 instance.metadata.decimals = decimals;
+                instance.owner = Self::env().caller();
             })
         }
 
@@ -60,6 +74,19 @@ mod psp22_example {
     impl psp22::PSP22 for Psp22Example {}
 
     impl metadata::PSP22Metadata for Psp22Example {}
+
+    impl mintable::PSP22Mintable for Psp22Example {
+        #[ink(message)]
+        fn mint(&mut self, account: AccountId, amount: Balance) -> Result<()> {
+            let caller = self.env().caller();
+
+            if caller != self.owner {
+                return Err(OwnableError::CallerIsNotOwner.into());
+            }
+
+            self._mint_to(account, amount)
+        }
+    }
 
     // Overwrite the `psp22::Internal` trait to emit the events as described in the PSP22 spec:
     // https://github.com/w3f/PSPs/blob/master/PSPs/psp-22.md#transfer
@@ -87,7 +114,7 @@ mod psp22_example {
                     owner: _owner,
                     spender: _spender,
                     value: _amount,
-                })
+                }),
             )
         }
     }
