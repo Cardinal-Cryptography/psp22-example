@@ -14,7 +14,7 @@ mod psp22_example {
         contracts::{
             psp22::{
                 self,
-                extensions::{metadata, mintable},
+                extensions::{burnable, metadata, mintable},
                 psp22::Internal,
                 PSP22Error,
             },
@@ -85,6 +85,18 @@ mod psp22_example {
             }
 
             self._mint_to(account, amount)
+        }
+    }
+
+    impl burnable::PSP22Burnable for Psp22Example {
+        #[ink(message)]
+        fn burn(&mut self, account: AccountId, amount: Balance) -> Result<()> {
+            let caller = self.env().caller();
+            if caller != self.owner {
+                return Err(OwnableError::CallerIsNotOwner.into());
+            }
+
+            self._burn_from(account, amount)
         }
     }
 
