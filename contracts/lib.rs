@@ -27,7 +27,20 @@ mod psp22_example {
                 instance.metadata.name = Some(name.into());
                 instance.metadata.symbol = Some(symbol.into());
                 instance.metadata.decimals = decimals;
-                instance.psp22._mint_to(Self::env().caller(), total_supply).unwrap();
+                // Mint initial supply to the caller.
+                instance
+                    .psp22
+                    ._mint_to(Self::env().caller(), total_supply)
+                    .unwrap();
+            })
+        }
+
+        #[ink(constructor)]
+        pub fn new_no_initial_supply(name: String, symbol: String, decimals: u8) -> Self {
+            ink_lang::codegen::initialize_contract(|instance: &mut Psp22Example| {
+                instance.metadata.name = Some(name.into());
+                instance.metadata.symbol = Some(symbol.into());
+                instance.metadata.decimals = decimals;
             })
         }
 
