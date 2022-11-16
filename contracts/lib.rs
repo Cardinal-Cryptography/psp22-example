@@ -12,14 +12,15 @@ mod psp22_example {
     use ink_storage::traits::SpreadAllocate;
     use openbrush::{
         contracts::{
+            ownable::*,
             psp22::{
                 self,
                 extensions::{burnable, metadata, mintable},
                 psp22::Internal,
                 PSP22Error,
             },
-            traits::ownable::OwnableError,
         },
+        modifiers,
         traits::Storage,
     };
 
@@ -36,7 +37,8 @@ mod psp22_example {
         psp22: psp22::Data,
         #[storage_field]
         metadata: metadata::Data,
-        owner: AccountId,
+        #[storage_field]
+        ownable: ownable::Data,
     }
 
     impl Psp22Example {
@@ -51,7 +53,7 @@ mod psp22_example {
                     .psp22
                     ._mint_to(Self::env().caller(), total_supply)
                     .unwrap();
-                instance.owner = Self::env().caller();
+                instance._init_with_owner(Self::env().caller());
             })
         }
 
@@ -61,7 +63,7 @@ mod psp22_example {
                 instance.metadata.name = Some(name.into());
                 instance.metadata.symbol = Some(symbol.into());
                 instance.metadata.decimals = decimals;
-                instance.owner = Self::env().caller();
+                instance._init_with_owner(Self::env().caller());
             })
         }
 
@@ -75,27 +77,20 @@ mod psp22_example {
 
     impl metadata::PSP22Metadata for Psp22Example {}
 
+    impl Ownable for Psp22Example {}
+
     impl mintable::PSP22Mintable for Psp22Example {
         #[ink(message)]
+        #[modifiers(only_owner)]
         fn mint(&mut self, account: AccountId, amount: Balance) -> Result<()> {
-            let caller = self.env().caller();
-
-            if caller != self.owner {
-                return Err(OwnableError::CallerIsNotOwner.into());
-            }
-
             self._mint_to(account, amount)
         }
     }
 
     impl burnable::PSP22Burnable for Psp22Example {
         #[ink(message)]
+        #[modifiers(only_owner)]
         fn burn(&mut self, account: AccountId, amount: Balance) -> Result<()> {
-            let caller = self.env().caller();
-            if caller != self.owner {
-                return Err(OwnableError::CallerIsNotOwner.into());
-            }
-
             self._burn_from(account, amount)
         }
     }

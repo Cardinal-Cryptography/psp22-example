@@ -18,7 +18,7 @@ scale = { package = "parity-scale-codec", version = "3", default-features = fals
 scale-info = { version = "2", default-features = false, features = ["derive"], optional = true }
 
 # Brush dependency
-openbrush = { git = "https://github.com/Supercolony-net/openbrush-contracts", rev = "v2.3.0", default-features = false, features = ["psp22"] }
+openbrush = { git = "https://github.com/Supercolony-net/openbrush-contracts", rev = "v2.3.0", default-features = false, features = ["psp22", "ownable"] }
 
 [features]
 default = ["std"]
