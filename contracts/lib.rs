@@ -43,11 +43,6 @@ mod psp22_example {
                 instance.metadata.decimals = decimals;
             })
         }
-
-        #[ink(message)]
-        pub fn get(&self) -> bool {
-            false
-        }
     }
 
     impl psp22::PSP22 for Psp22Example {}
