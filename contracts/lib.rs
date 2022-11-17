@@ -2,6 +2,8 @@
 #![feature(min_specialization)]
 #![allow(clippy::let_unit_value)]
 
+pub use crate::psp22_example::selectors::*;
+
 #[openbrush::contract]
 mod psp22_example {
     use ink_lang::{
@@ -29,6 +31,19 @@ mod psp22_example {
 
     /// Event type
     pub type Event = <Psp22Example as ContractEventBase>::Type;
+
+    pub(super) mod selectors {
+        // Selectors for the methods of interest on PSP22.
+        // NOTE: They can be found in `target/ink/metadata.json` after building the contract.
+        pub const TOTAL_SUPPLY_SELECTOR: [u8; 4] = [0x16, 0x2d, 0xf8, 0xc2];
+        pub const TRANSFER_TO_SELECTOR: [u8; 4] = [0xdb, 0x20, 0xf9, 0xf5];
+        pub const TRANSFER_FROM_SELECTOR: [u8; 4] = [0x54, 0xb3, 0xc7, 0x6e];
+        pub const BALANCE_OF_SELECTOR: [u8; 4] = [0x65, 0x68, 0x38, 0x2f];
+        pub const APPROVE_ALLOWANCE_SELECTOR: [u8; 4] = [0xb2, 0x0f, 0x1b, 0xbd];
+        pub const INCREASE_ALLOWANCE_SELECTOR: [u8; 4] = [0x96, 0xd6, 0xb5, 0x7a];
+        pub const MINT_SELECTOR: [u8; 4] = [0xfc, 0x3c, 0x75, 0xd4];
+        pub const BURN_SELECTOR: [u8; 4] = [0x7a, 0x9d, 0xa5, 0x10];
+    }
 
     #[ink(storage)]
     #[derive(Default, SpreadAllocate, Storage)]
