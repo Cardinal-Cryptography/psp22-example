@@ -15,4 +15,6 @@ pub enum PSP22Cmd {
         #[arg(long, short = 's')]
         account_seed: String,
     },
+    /// Prints total supply of the underlying token.
+    TotalSupply,
 }

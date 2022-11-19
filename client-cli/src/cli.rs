@@ -6,10 +6,10 @@ use clap::Parser;
 use crate::commands::Command;
 
 /// Utilities for interacting with a sample PSP22 contract.
-#[derive(Parser)]
+#[derive(Parser, Debug)]
 pub struct Cli {
     /// WS endpoint address of the node.
-    #[clap(short = 'n', long = "node", default_value = "http://localhost:9933")]
+    #[clap(short = 'n', long = "node", default_value = "ws://localhost:9944")]
     pub node_address: String,
 
     /// On-chain address of a contract
@@ -17,7 +17,7 @@ pub struct Cli {
     pub contract_address: AccountId,
 
     /// Path to contract's metadata.
-    #[clap(short = 'm', value_parser  = parsing::parse_path)]
+    #[clap(short = 'm', default_value = "metadata.json", value_parser  = parsing::parse_path)]
     pub contract_metadata: PathBuf,
 
     #[clap(subcommand)]
