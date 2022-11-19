@@ -42,8 +42,8 @@ ink-as-dependency = []
 name = "psp22_example"
 path = "lib.rs"
 crate-type = [
-	# Used for normal contract Wasm blobs.
-	"cdylib",
-    # Used for ABI generation and for unit test.
-    "rlib",
+  # Used for normal contract Wasm blobs.
+  "cdylib",
+  # Used for ABI generation and for unit test.
+  "rlib",
 ]

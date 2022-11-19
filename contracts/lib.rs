@@ -97,6 +97,7 @@ mod psp22_example {
     impl mintable::PSP22Mintable for Psp22Example {
         #[ink(message)]
         #[modifiers(only_owner)]
+        /// Mints the `amount` of underlying tokens to the recipient identified by the `account` address.
         fn mint(&mut self, account: AccountId, amount: Balance) -> Result<()> {
             self._mint_to(account, amount)
         }
@@ -105,6 +106,7 @@ mod psp22_example {
     impl burnable::PSP22Burnable for Psp22Example {
         #[ink(message)]
         #[modifiers(only_owner)]
+        /// Burns the `amount` of underlying tokens from the balance of `account` recipient.
         fn burn(&mut self, account: AccountId, amount: Balance) -> Result<()> {
             self._burn_from(account, amount)
         }
