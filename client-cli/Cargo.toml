@@ -1,5 +1,5 @@
 [package]
-name = "psp22-example-client"
+name = "psp22-client"
 version = "0.1.0"
 edition = "2021"
 authors = ["Cardinal Cryptography"]
@@ -12,6 +12,7 @@ codec = { package = "parity-scale-codec", version = "3.0.0", default-features = 
 hex = "0.4.3"
 serde = { version = "1.0.147", features = ["derive"] }
 serde_json = "1.0.87"
+# shell expansions (expands env vars and ~ to home  )
 shellexpand = "2.1.2"
 
 aleph_client = { git = "https://github.com/Cardinal-Cryptography/aleph-node/", rev = "09012bc" }
