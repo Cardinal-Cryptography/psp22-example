@@ -88,10 +88,13 @@ mod psp22_example {
         }
     }
 
+    // We have to implement the "main trait" for our contract to have the PSP22 methods available.
     impl psp22::PSP22 for Psp22Example {}
 
+    // And `PSP22Metadata` to get metadata-related methods.
     impl metadata::PSP22Metadata for Psp22Example {}
 
+    // And so on...
     impl Ownable for Psp22Example {}
 
     impl mintable::PSP22Mintable for Psp22Example {
