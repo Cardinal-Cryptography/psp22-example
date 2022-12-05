@@ -5,7 +5,7 @@ mod contracts;
 
 use anyhow::Context;
 use clap::Parser;
-use contracts::PSP22Contract;
+use contracts::{ownable::OwnableContract, psp22::PSP22Contract};
 
 fn main() -> anyhow::Result<()> {
     let cli = cli::Cli::parse();
@@ -16,6 +16,11 @@ fn main() -> anyhow::Result<()> {
             let contract = PSP22Contract::new(cli.contract_address, &*cli.contract_metadata)
                 .context("failed to create an instance of PSP22Contract")?;
             actions::psp22::run(&unsigned_connection, &contract, psp22_cmd)?;
+        }
+        commands::Command::Ownable(ownable_cmd) => {
+            let contract = OwnableContract::new(cli.contract_address, &*cli.contract_metadata)
+                .context("failed to create an instance of OwnableContract")?;
+            actions::ownable::run(&unsigned_connection, &contract, ownable_cmd)?;
         }
     }
     Ok(())

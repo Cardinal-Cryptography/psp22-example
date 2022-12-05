@@ -1,3 +1,5 @@
-mod psp22;
+#[allow(unused)]
+pub mod psp22;
 
-pub use psp22::PSP22Contract;
+#[allow(unused)]
+pub mod ownable;
