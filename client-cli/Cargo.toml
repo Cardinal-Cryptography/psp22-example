@@ -15,4 +15,4 @@ serde_json = "1.0.87"
 # shell expansions (expands env vars and ~ to home  )
 shellexpand = "2.1.2"
 
-aleph_client = { git = "https://github.com/Cardinal-Cryptography/aleph-node/", rev = "09012bc" }
+aleph_client = { git = "https://github.com/Cardinal-Cryptography/aleph-node/", branch = "convertible_for_string" }
