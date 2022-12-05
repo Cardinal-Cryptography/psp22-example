@@ -24,18 +24,11 @@ function log_progress {
   echo "[$(get_timestamp)] [INFO] ${bold}${1}${normal}"
 }
 
-NODE_URL=""
-AUTHORITY_SEED=""
+NODE_URL=${NODE_URL:-"ws://localhost:9944"}
+AUTHORITY_SEED=${AUTHORITY_SEED:-"//Alice"}
 
-if [ -z "${NODE_URL}" ]; then
-  log_progress "NODE_URL var not set. Using default ws://localhost:9944"
-  NODE_URL="ws://localhost:9944"
-fi
-
-if [ -z "$AUTHORITY_SEED" ]; then
-  log_progress "AUTHORITY_SEED var not set. Using default //Alice"
-  AUTHORITY_SEED="//Alice"
-fi
+log_progress "NODE_URL=${NODE_URL}"
+log_progress "AUTHORITY_SEED=${AUTHORITY_SEED}"
   
 
 TOKEN_NAME="TEST0"
