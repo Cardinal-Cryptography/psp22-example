@@ -7,6 +7,6 @@
 
 ## Instructions
 
-1. Run local aleph network (easeies is to check out the `aleph-node` repository and run `./scripts/run_nodes.sh` in the root folder).
+1. Run local aleph network (easiest is to check out the `aleph-node` repository and run `./scripts/run_nodes.sh` in the root folder).
 2. Execute `./setup.sh` script.
 3. If successful - contract address is printed to the console and stored in `addresses.json` file.
