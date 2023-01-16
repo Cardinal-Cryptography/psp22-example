@@ -5,7 +5,7 @@ use crate::{
     contracts::psp22::{PSP22Contract, TokenMetadata},
 };
 
-pub fn run(conn: &Connection, contract: &PSP22Contract, cmd: PSP22Cmd) -> anyhow::Result<()> {
+pub async fn run(conn: Connection, contract: &PSP22Contract, cmd: PSP22Cmd) -> anyhow::Result<()> {
     match cmd {
         PSP22Cmd::Transfer {
             recipient,
@@ -13,18 +13,20 @@ pub fn run(conn: &Connection, contract: &PSP22Contract, cmd: PSP22Cmd) -> anyhow
             account_seed,
         } => {
             let keypair = aleph_client::keypair_from_string(&account_seed);
-            let signed_connection = SignedConnection::from_any_connection(conn, keypair);
-            contract.transfer(&signed_connection, &recipient, amount)
+            let signed_connection = SignedConnection::from_connection(conn, keypair);
+            contract
+                .transfer(&signed_connection, &recipient, amount)
+                .await
         }
         PSP22Cmd::TotalSupply => {
-            let total_supply = contract.total_supply(&conn)?;
+            let total_supply = contract.total_supply(&conn).await?;
             println!("Total supply of the underlying token: {:?}", total_supply);
             Ok(())
         }
         PSP22Cmd::GetTokenMetadata => {
-            let token_name = contract.token_name(&conn)?;
-            let token_symbol = contract.token_symbol(&conn)?;
-            let token_decimals = contract.token_decimals(&conn)?;
+            let token_name = contract.token_name(&conn).await?;
+            let token_symbol = contract.token_symbol(&conn).await?;
+            let token_decimals = contract.token_decimals(&conn).await?;
             let token_metadata = TokenMetadata {
                 name: token_name,
                 symbol: token_symbol,
@@ -39,13 +41,15 @@ pub fn run(conn: &Connection, contract: &PSP22Contract, cmd: PSP22Cmd) -> anyhow
             account_seed,
         } => {
             let keypair = aleph_client::keypair_from_string(&account_seed);
-            let signed_connection = SignedConnection::from_any_connection(conn, keypair);
-            let _ = contract.approve(&signed_connection, &spender, amount)?;
+            let signed_connection = SignedConnection::from_connection(conn, keypair);
+            contract
+                .approve(&signed_connection, &spender, amount)
+                .await?;
             println!("Approved {:?} tokens to spend by {:?}", amount, &spender);
             Ok(())
         }
         PSP22Cmd::BalanceOf { account } => {
-            let balance = contract.balance_of(&conn, &account)?;
+            let balance = contract.balance_of(&conn, &account).await?;
             println!("Balance of {:?}: {:?}", &account, balance);
             Ok(())
         }
@@ -55,8 +59,8 @@ pub fn run(conn: &Connection, contract: &PSP22Contract, cmd: PSP22Cmd) -> anyhow
             account_seed,
         } => {
             let keypair = aleph_client::keypair_from_string(&account_seed);
-            let signed_connection = SignedConnection::from_any_connection(conn, keypair);
-            contract.mint(&signed_connection, &account, balance)?;
+            let signed_connection = SignedConnection::from_connection(conn, keypair);
+            contract.mint(&signed_connection, &account, balance).await?;
             println!("Minted {:?} of tokens to {:?}.", balance, &account);
             Ok(())
         }
@@ -66,8 +70,8 @@ pub fn run(conn: &Connection, contract: &PSP22Contract, cmd: PSP22Cmd) -> anyhow
             account_seed,
         } => {
             let keypair = aleph_client::keypair_from_string(&account_seed);
-            let signed_connection = SignedConnection::from_any_connection(conn, keypair);
-            contract.burn(&signed_connection, &account, balance)?;
+            let signed_connection = SignedConnection::from_connection(conn, keypair);
+            contract.burn(&signed_connection, &account, balance).await?;
             println!("Burnt {:?} of tokens from {:?}.", balance, &account);
             Ok(())
         }

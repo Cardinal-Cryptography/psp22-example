@@ -18,17 +18,24 @@ impl OwnableContract {
         })
     }
 
-    pub fn renounce_ownership(&self, conn: &SignedConnection) -> Result<()> {
+    pub async fn renounce_ownership(&self, conn: &SignedConnection) -> Result<()> {
         self.contract
-            .contract_exec0(&conn, "Ownable::renounce_ownership")
+            .contract_exec0(conn, "Ownable::renounce_ownership")
+            .await
     }
 
-    pub fn transfer_ownership(&self, conn: &SignedConnection, new_owner: &AccountId) -> Result<()> {
-        let _ = self.contract.contract_exec(
-            &conn,
-            "Ownable::transfer_ownership",
-            &[new_owner.to_string()],
-        )?;
+    pub async fn transfer_ownership(
+        &self,
+        conn: &SignedConnection,
+        new_owner: &AccountId,
+    ) -> Result<()> {
+        self.contract
+            .contract_exec(
+                conn,
+                "Ownable::transfer_ownership",
+                &[new_owner.to_string()],
+            )
+            .await?;
         Ok(())
     }
 

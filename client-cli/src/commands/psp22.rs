@@ -1,5 +1,7 @@
-use aleph_client::{AccountId, Balance};
+use aleph_client::AccountId;
 use clap::Subcommand;
+
+use crate::utils::Balance;
 
 #[derive(Clone, Eq, PartialEq, Debug, Subcommand)]
 pub enum PSP22Cmd {
