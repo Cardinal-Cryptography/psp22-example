@@ -20,7 +20,7 @@ pub async fn run(conn: Connection, contract: &PSP22Contract, cmd: PSP22Cmd) -> a
         }
         PSP22Cmd::TotalSupply => {
             let total_supply = contract.total_supply(&conn).await?;
-            println!("Total supply of the underlying token: {:?}", total_supply);
+            println!("Total supply of the underlying token: {total_supply:?}");
             Ok(())
         }
         PSP22Cmd::GetTokenMetadata => {
@@ -32,7 +32,7 @@ pub async fn run(conn: Connection, contract: &PSP22Contract, cmd: PSP22Cmd) -> a
                 symbol: token_symbol,
                 decimals: token_decimals,
             };
-            println!("{:?}", token_metadata);
+            println!("{token_metadata:?}");
             Ok(())
         }
         PSP22Cmd::Approve {
