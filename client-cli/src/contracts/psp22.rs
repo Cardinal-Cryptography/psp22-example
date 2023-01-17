@@ -38,13 +38,13 @@ impl PSP22Contract {
     pub async fn total_supply(&self, conn: &Connection) -> Result<Balance> {
         self.contract
             .contract_read0(conn, "PSP22::total_supply")
-            .await?
+            .await
     }
 
     pub async fn balance_of(&self, conn: &Connection, account: &AccountId) -> Result<Balance> {
         self.contract
             .contract_read(conn, "PSP22::balance_of", &[account.to_string()])
-            .await?
+            .await
     }
 
     pub async fn transfer(
@@ -105,19 +105,19 @@ impl PSP22Contract {
     pub async fn token_symbol(&self, conn: &Connection) -> Result<Option<String>> {
         self.contract
             .contract_read0(conn, "PSP22Metadata::token_symbol")
-            .await?
+            .await
     }
 
     pub async fn token_name(&self, conn: &Connection) -> Result<Option<String>> {
         self.contract
             .contract_read0(conn, "PSP22Metadata::token_name")
-            .await?
+            .await
     }
 
     pub async fn token_decimals(&self, conn: &Connection) -> Result<u128> {
         self.contract
             .contract_read0(conn, "PSP22Metadata::token_decimals")
-            .await?
+            .await
     }
 
     /// Consumes self and returns the inner contract instance.
