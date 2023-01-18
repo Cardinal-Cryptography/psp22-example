@@ -6,12 +6,11 @@ pub use crate::psp22_example::selectors::*;
 
 #[openbrush::contract]
 mod psp22_example {
-    use ink_lang::{
+    use ink::{
         codegen::{EmitEvent, Env},
+        prelude::string::String,
         reflect::ContractEventBase,
     };
-    use ink_prelude::string::String;
-    use ink_storage::traits::SpreadAllocate;
     use openbrush::{
         contracts::{
             ownable::*,
@@ -46,7 +45,7 @@ mod psp22_example {
     }
 
     #[ink(storage)]
-    #[derive(Default, SpreadAllocate, Storage)]
+    #[derive(Default, Storage)]
     pub struct Psp22Example {
         #[storage_field]
         psp22: psp22::Data,
@@ -59,27 +58,32 @@ mod psp22_example {
     impl Psp22Example {
         #[ink(constructor)]
         pub fn new(name: String, symbol: String, decimals: u8, total_supply: Balance) -> Self {
-            ink_lang::codegen::initialize_contract(|instance: &mut Psp22Example| {
-                instance.metadata.name = Some(name.into());
-                instance.metadata.symbol = Some(symbol.into());
-                instance.metadata.decimals = decimals;
-                // Mint initial supply to the caller.
-                instance
-                    .psp22
-                    ._mint_to(Self::env().caller(), total_supply)
-                    .unwrap();
-                instance._init_with_owner(Self::env().caller());
-            })
+            let mut instance = Self::default();
+
+            instance.metadata.name = Some(name.into());
+            instance.metadata.symbol = Some(symbol.into());
+            instance.metadata.decimals = decimals;
+            instance._init_with_owner(Self::env().caller());
+
+            // Mint initial supply to the caller.
+            instance
+                .psp22
+                ._mint_to(Self::env().caller(), total_supply)
+                .unwrap();
+
+            instance
         }
 
         #[ink(constructor)]
         pub fn new_no_initial_supply(name: String, symbol: String, decimals: u8) -> Self {
-            ink_lang::codegen::initialize_contract(|instance: &mut Psp22Example| {
-                instance.metadata.name = Some(name.into());
-                instance.metadata.symbol = Some(symbol.into());
-                instance.metadata.decimals = decimals;
-                instance._init_with_owner(Self::env().caller());
-            })
+            let mut instance = Self::default();
+
+            instance.metadata.name = Some(name.into());
+            instance.metadata.symbol = Some(symbol.into());
+            instance.metadata.decimals = decimals;
+            instance._init_with_owner(Self::env().caller());
+
+            instance
         }
 
         // Emit event abstraction. Otherwise ink! deserializes events incorrectly when there are events from more than one contract.

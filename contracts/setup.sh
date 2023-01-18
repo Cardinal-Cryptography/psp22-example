@@ -2,13 +2,6 @@
 
 set -euo pipefail
 
-function assert_proper_cargo_contract {
-  local cargo_version=$(cargo contract --version)
-  if [ "$cargo_version" != "cargo-contract 1.5.0-2b17587-x86_64-unknown-linux-gnu" ]; then
-    error "Detected incorrect cargo-contract version: ${cargo_version}. Please install rev=2b17587 that contains required bug fixes."
-  fi
-}
-
 function get_timestamp {
   echo "$(date +'%Y-%m-%d %H:%M:%S')"
 }
@@ -58,12 +51,17 @@ function deploy_contract {
     '{ "contract_address" : $contract_address }' > addresses.json
 }
 
-assert_proper_cargo_contract
+function copy_metadata {
+  cp target/ink/metadata.json ../client-cli
+}
 
 log_progress "Building contract.."
 build_contract || error "Failed to build contract"
 
 log_progress "Deploying contract.."
 deploy_contract || error "Failed to deploy contract"
+
+log_progress "Copying contract metadata to client directory.."
+copy_metadata || error "Failed to copy contract metadata"
 
 exit $?
