@@ -1,4 +1,4 @@
-# NOTE: `main` branch of this repository contains contracts compatible with ink! 3.
+# NOTE: `main` branch of this repository contains contracts compatible with ink! 4.
 
 # Example PSP22 (ERC20) token contract
 
