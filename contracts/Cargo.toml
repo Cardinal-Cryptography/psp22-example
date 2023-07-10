@@ -5,13 +5,13 @@ authors = ["Cardinals Cryptography"]
 edition = "2021"
 
 [dependencies]
-ink = { git = "https://github.com/paritytech/ink", rev = "4655a8b4413cb50cbc38d1b7c173ad426ab06cde", default-features = false }
+ink = { version = "=4.2.1", default-features = false }
 
 scale = { package = "parity-scale-codec", version = "3", default-features = false, features = ["derive"] }
-scale-info = { version = "2.3", default-features = false, features = ["derive"], optional = true }
+scale-info = { version = "2.6", default-features = false, features = ["derive"], optional = true }
 
 # Brush dependency
-openbrush = { git = "https://github.com/727-Ventures/openbrush-contracts/", tag = "3.0.0-beta", default-features = false, features = ["psp22", "ownable"] }
+openbrush = { git = "https://github.com/727-Ventures/openbrush-contracts/", tag = "3.1.1", default-features = false, features = ["psp22", "ownable"] }
 
 [features]
 default = ["std"]
@@ -29,9 +29,3 @@ ink-as-dependency = []
 [lib]
 name = "psp22_example"
 path = "lib.rs"
-crate-type = [
-  # Used for normal contract Wasm blobs.
-  "cdylib",
-  # Used for ABI generation and for unit test.
-  "rlib",
-]
