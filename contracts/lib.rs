@@ -1,4 +1,4 @@
-#![cfg_attr(not(feature = "std"), no_std)]
+#![cfg_attr(not(feature = "std"), no_std, no_main)]
 #![feature(min_specialization)]
 #![allow(clippy::let_unit_value)]
 
@@ -60,8 +60,8 @@ mod psp22_example {
         pub fn new(name: String, symbol: String, decimals: u8, total_supply: Balance) -> Self {
             let mut instance = Self::default();
 
-            instance.metadata.name = Some(name.into());
-            instance.metadata.symbol = Some(symbol.into());
+            instance.metadata.name = Some(name);
+            instance.metadata.symbol = Some(symbol);
             instance.metadata.decimals = decimals;
             instance._init_with_owner(Self::env().caller());
 
@@ -78,8 +78,8 @@ mod psp22_example {
         pub fn new_no_initial_supply(name: String, symbol: String, decimals: u8) -> Self {
             let mut instance = Self::default();
 
-            instance.metadata.name = Some(name.into());
-            instance.metadata.symbol = Some(symbol.into());
+            instance.metadata.name = Some(name);
+            instance.metadata.symbol = Some(symbol);
             instance.metadata.decimals = decimals;
             instance._init_with_owner(Self::env().caller());
 
